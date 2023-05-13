@@ -1,0 +1,6 @@
+README.md
+pom.xml
+src/main/java/pl/ing/green/atmservice/api/ApiUtil.java
+src/main/java/pl/ing/green/atmservice/api/AtmsApi.java
+src/main/java/pl/ing/green/atmservice/model/ATM.java
+src/main/java/pl/ing/green/atmservice/model/Task.java
