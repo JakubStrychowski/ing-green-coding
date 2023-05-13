@@ -14,8 +14,12 @@ import pl.ing.green.onlinegame.model.Players;
 @RestController
 public class OnlinegameService implements OnlinegameApi {
     
-    private OnlineGameAlgorithm algorithm = OnlineGameAlgorithm.SELECT_BEST;
+    private OnlineGameAlgorithm algorithm;
 
+    public OnlinegameService() {
+        algorithm = OnlineGameAlgorithm.SELECT_BEST;
+    }
+    
     public OnlinegameService(OnlineGameAlgorithm algorithm) {
         this.algorithm = algorithm;
     }
