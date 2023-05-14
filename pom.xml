@@ -113,4 +113,41 @@
         
     </dependencies>
 
+    <build>
+        
+        <resources>
+             <resource>
+                 <directory>${basedir}</directory>
+                 <includes>
+                     <include>LICENSE.txt</include>
+                 </includes>
+             </resource>
+         </resources>
+            
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>2.0.1</version>
+                <executions>
+                    <execution>
+                        <id>generate-license</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>aggregate-add-third-party</goal>
+                            <goal>aggregate-third-party-report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <useMissingFile>false</useMissingFile>
+                    <outputDirectory>licenses</outputDirectory>
+                    <excludes>
+                        <exclude>target/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>    
+    </build>        
+
 </project>
