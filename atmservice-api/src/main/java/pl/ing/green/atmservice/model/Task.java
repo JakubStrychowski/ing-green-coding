@@ -14,14 +14,14 @@ import jakarta.annotation.Generated;
 public class Task {
 
     @JsonProperty("region")
-    private Integer region;
+    private int region;
 
 
     @JsonProperty("requestType")
     private RequestTypeEnum requestType;
 
     @JsonProperty("atmId")
-    private Integer atmId;
+    private int atmId;
     
     public Task() {
         
@@ -33,7 +33,7 @@ public class Task {
         this.requestType = type;
     }
 
-    public Task region(Integer region) {
+    public Task region(int region) {
         this.region = region;
         return this;
     }
@@ -46,11 +46,11 @@ public class Task {
     @Min(1)
     @Max(9999)
     @Schema(name = "region", example = "10", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-    public Integer getRegion() {
+    public int getRegion() {
         return region;
     }
 
-    public void setRegion(Integer region) {
+    public void setRegion(int region) {
         this.region = region;
     }
 
@@ -73,7 +73,7 @@ public class Task {
         this.requestType = requestType;
     }
 
-    public Task atmId(Integer atmId) {
+    public Task atmId(int atmId) {
         this.atmId = atmId;
         return this;
     }
@@ -86,11 +86,11 @@ public class Task {
     @Min(1)
     @Max(9999)
     @Schema(name = "atmId", example = "500", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-    public Integer getAtmId() {
+    public int getAtmId() {
         return atmId;
     }
 
-    public void setAtmId(Integer atmId) {
+    public void setAtmId(int atmId) {
         this.atmId = atmId;
     }
 

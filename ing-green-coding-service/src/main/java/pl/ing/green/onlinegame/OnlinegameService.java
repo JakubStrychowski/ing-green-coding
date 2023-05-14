@@ -8,35 +8,54 @@ import pl.ing.green.onlinegame.model.Clan;
 import pl.ing.green.onlinegame.model.Players;
 
 /**
+ * Services which arrange order of players entry to the game.
  *
  * @author Jakub Strychowski
  */
 @RestController
 public class OnlinegameService implements OnlinegameApi {
     
+    /**
+     * Algorithm used to organize players.
+     */
     private OnlineGameAlgorithm algorithm;
 
+    /**
+     * Creates a service which automatically estimates best algorithm for a task.
+     */
     public OnlinegameService() {
         algorithm = OnlineGameAlgorithm.SELECT_BEST;
     }
     
+    /**
+     * Creates a service which uses the given algorithm for a task.
+     *
+     * @param algorithm
+     */
     public OnlinegameService(OnlineGameAlgorithm algorithm) {
         this.algorithm = algorithm;
     }
     
+    /**
+     * Plans order of entry of clans to the game.
+     *
+     * @param players information about clans, and maximum size of a single group.
+     * 
+     * @return List of groups of clans. Clans enter the game in order of groups.
+     */
     public List<List<Clan>> organizePlayers(Players players) {
         PlayersOrganizer organizer;
         switch (algorithm) {
             case BEST_CLANS_FIRST:
                 // O(C, GSIZE, GCOUNT) = MAX(C x log(C), C x GCOUNT) 
                 // This algorithm may be faster when we have
-                // not too much clans, and we have quite big max group size
+                // not too much clans, and we have quite big max group size.
                 // If clans can be put to few groups algorithm is almost
                 // linear. It can be slower if average clan size is big.
                 organizer = new PlayersOrganizerBestClansFirst(players);
                 break;
             case FAST_SEARCH_MACTCHING_CLAN:
-                // This algorithm is better in most real cases (a lot of clans and many groups).
+                // This algorithm is best in most real cases (a lot of clans and many groups).
                 // O(C, GSIZE, GCOUNT) = MAX(C x log(C), C x GSIZE) 
                 organizer = new PlayersOrganizerSearchMatchingClan(players);
                 break;
@@ -51,6 +70,7 @@ public class OnlinegameService implements OnlinegameApi {
             default:
                 // Best algorithm depends from size and structure of input data.
                 // Following is a simple aproximation to select best algorithm.
+                // 
                 // GCOUNT ~ C * AVG_C_SIZE / GSIZE 
                 // AVG_C_SIZE ~ GSIZE / 2  - for random C size between 0 and GSIZE
                 // 
@@ -66,21 +86,28 @@ public class OnlinegameService implements OnlinegameApi {
                     organizer = new PlayersOrganizerSearchMatchingClan(players);
                 }
         }
-        
                 
         return organizePlayers(players, organizer);
     }
     
+    /**
+     * Plans order of entry of clans to the game using the given organizer.
+     *
+     * @param players
+     * @param organizer
+     * @return
+     */
     protected List<List<Clan>> organizePlayers(Players players, PlayersOrganizer organizer) {
-        //System.out.println(organizer.getClass().getName());
-        //long startTime = System.currentTimeMillis();
         List<List<Clan>> result = organizer.organizePlayers();
-        //System.out.println("Duration = " +  (System.currentTimeMillis() - startTime));
-        //logResult(result);
         return result;
     }
     
-
+    /**
+     * Prints result to the System.out.
+     * This method is used for debuging purposes.
+     *
+     * @param result result to print.
+     */
     public void logResult(List<List<Clan>> result) {
         for (List<Clan> group : result) {
             StringBuilder line = new StringBuilder();

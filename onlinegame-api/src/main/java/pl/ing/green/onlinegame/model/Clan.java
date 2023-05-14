@@ -1,17 +1,11 @@
 package pl.ing.green.onlinegame.model;
 
-import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import org.openapitools.jackson.nullable.JsonNullable;
-import java.time.OffsetDateTime;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 
-import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
@@ -22,10 +16,10 @@ import jakarta.annotation.Generated;
 public class Clan {
 
   @JsonProperty("numberOfPlayers")
-  private Integer numberOfPlayers;
+  private int numberOfPlayers;
 
   @JsonProperty("points")
-  private Integer points;
+  private int points;
   
   public Clan() {
       
@@ -37,7 +31,7 @@ public class Clan {
         this.points = numberOfPoints;
     }
 
-  public Clan numberOfPlayers(Integer numberOfPlayers) {
+  public Clan numberOfPlayers(int numberOfPlayers) {
     this.numberOfPlayers = numberOfPlayers;
     return this;
   }
@@ -50,15 +44,15 @@ public class Clan {
   */
   @Min(1) @Max(1000) 
   @Schema(name = "numberOfPlayers", example = "10", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  public Integer getNumberOfPlayers() {
+  public int getNumberOfPlayers() {
     return numberOfPlayers;
   }
 
-  public void setNumberOfPlayers(Integer numberOfPlayers) {
+  public void setNumberOfPlayers(int numberOfPlayers) {
     this.numberOfPlayers = numberOfPlayers;
   }
 
-  public Clan points(Integer points) {
+  public Clan points(int points) {
     this.points = points;
     return this;
   }
@@ -71,11 +65,11 @@ public class Clan {
   */
   @Min(1) @Max(1000000) 
   @Schema(name = "points", example = "500", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  public Integer getPoints() {
+  public int getPoints() {
     return points;
   }
 
-  public void setPoints(Integer points) {
+  public void setPoints(int points) {
     this.points = points;
   }
 

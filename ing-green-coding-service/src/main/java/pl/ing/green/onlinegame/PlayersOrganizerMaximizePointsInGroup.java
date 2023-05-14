@@ -12,7 +12,14 @@ import pl.ing.green.onlinegame.model.Clan;
 import pl.ing.green.onlinegame.model.Players;
 
 /**
- *
+ * Maximizes points in groups.
+ * This is experimental algorithm realizing different task.
+ * 
+ * In this algorithm strong clans may go later if they can be replaced
+ * be few weaker and smaller clans, but stronger when bind together.
+ * 
+ * Algorithm uses dynamic programming approach with backward caching.
+ * 
  * @author Jakub Strychowski
  */
 public class PlayersOrganizerMaximizePointsInGroup extends PlayersOrganizer {
@@ -88,7 +95,7 @@ public class PlayersOrganizerMaximizePointsInGroup extends PlayersOrganizer {
         
         
         
-        group.sort((c1, c2) -> c2.getPoints().compareTo(c1.getPoints()));
+        group.sort((c1, c2) -> Integer.compare(c2.getPoints(), c1.getPoints()));
         return group;
         
     }

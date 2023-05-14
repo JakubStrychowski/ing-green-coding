@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
- */
 package pl.ing.green.onlinegame;
 
 import java.util.ArrayList;
@@ -16,6 +12,7 @@ import pl.ing.green.onlinegame.model.Clan;
 import pl.ing.green.onlinegame.model.Players;
 
 /**
+ * Tests Onlinegame Service.
  *
  * @author Jakub Strychowski
  */
@@ -32,6 +29,13 @@ public class OnlinegameServiceTest {
     public void tearDown() {
     }
     
+    /**
+     * Creates test data from given arrays.
+     * 
+     * @param clanSizeAndPoints definition of clans in form of arrays used in tests.
+     * 
+     * @return input in form which may be used by the service.
+     */
     public List<Clan> createClanList(int[][] clanSizeAndPoints) {
         ArrayList<Clan> clans = new ArrayList<>();
         for (int[] clanParameters : clanSizeAndPoints) {
@@ -41,6 +45,13 @@ public class OnlinegameServiceTest {
         return clans;
     }
     
+    /**
+     * Creates test result from given array.
+     * 
+     * @param groupsArray definition of result groups in form of arrays used in tests.
+     * 
+     * @return output in form returned by the service.
+     */
     private List<List<Clan>> createGroupsList(int[][][] groupsArray) {
         List<List<Clan>> groupsList = new ArrayList<>();
         for (int[][] group : groupsArray) {
@@ -55,7 +66,14 @@ public class OnlinegameServiceTest {
     }
     
     
-    private void checkResult(List<List<Clan>> expected, List<List<Clan>> result) {
+    /**
+     * Checks if the given result is equals according to expectation.
+     * This method also validates correctness of the result.
+     * 
+     * @param expected Expected result.
+     * @param result Order of groups and clans returned by service.
+     */
+    public void checkResult(List<List<Clan>> expected, List<List<Clan>> result) {
         assertEquals(expected.size(), result.size());
         for (int groupNr = 0; groupNr < expected.size(); groupNr++) {
             List<Clan> expectedGroup = expected.get(groupNr);
@@ -70,9 +88,13 @@ public class OnlinegameServiceTest {
     }
 
     
-    /*
-    Checks if any clan should be in higher group
-    */
+    /**
+     * Validates if the given result is correct.
+     * This method checks if any clan may be placed in any group which 
+     * has higher priority then group in which this clan has been placed.
+     * 
+     * @param result Result of the Online Game Service.
+     */
     public void validateResult(List<List<Clan>> result) {
         for (int groupIndex = 0; groupIndex < result.size(); groupIndex++) {
             List<Clan> group = result.get(groupIndex);
@@ -97,6 +119,13 @@ public class OnlinegameServiceTest {
         }
     }
     
+    /**
+     * Validates single clan if it should be placed in higher group.
+     *
+     * @param result Result of the Online Game Service.
+     * @param clan Clan to validate.
+     * @param maxGroupIndex Check group having at most this index.
+     */
     protected void validateClan(List<List<Clan>> result, Clan clan, int maxGroupIndex) {
         for (int groupIndex = 0; groupIndex <= maxGroupIndex; groupIndex++) {
             List<Clan> group = result.get(groupIndex);
@@ -113,7 +142,15 @@ public class OnlinegameServiceTest {
         }
     }
     
-    private void doTest(int maxGroupSize, List<Clan> clans, List<List<Clan>> expectedGroups) {
+    /**
+     * Performs test on the given input data, and validates it with expected output.
+     * This method sets order of clans using different algorithms.
+     *
+     * @param maxGroupSize Maximum number of players in a group.
+     * @param clans List of players' clans to organize in order.
+     * @param expectedGroups Expected order of clans in groups.
+     */
+    protected void doTest(int maxGroupSize, List<Clan> clans, List<List<Clan>> expectedGroups) {
         Players players = new Players();
         players.setGroupCount(maxGroupSize);
         players.setClans(clans);
@@ -142,6 +179,9 @@ public class OnlinegameServiceTest {
         doTest(maxGroupSize, clans, expeckedGroups);
     }
     
+    /**
+     * Tests example from the specification.
+     */
     @Test
     public void testExample1() {
         
@@ -163,6 +203,9 @@ public class OnlinegameServiceTest {
         
     }
 
+    /**
+     *  Test in which result should contain only one group.
+     */
     @Test
     public void testOneGroup() {
         
@@ -180,6 +223,9 @@ public class OnlinegameServiceTest {
         
     }
 
+    /**
+     * Test in which result should contain two groups.
+     */
     @Test
     public void testTwoGroups() {
         
@@ -197,6 +243,9 @@ public class OnlinegameServiceTest {
         doTest(maxGroupSize, clansArray, expectedGroups);
     }
     
+    /**
+     * Test using example from the specification but with group size = 8.
+     */
     @Test
     public void testGroupSize8() {
         
@@ -216,6 +265,9 @@ public class OnlinegameServiceTest {
         doTest(maxGroupSize, clansArray, expectedGroups);
     }
     
+    /**
+     * Test which should return one column of clans (each group contains exactly one clan).
+     */
     @Test
     public void testOneColumn() {
         
@@ -241,6 +293,9 @@ public class OnlinegameServiceTest {
         doTest(maxGroupSize, clansArray, expectedGroups);
     }
 
+    /**
+     * Test which process only single clan.
+     */
     @Test
     public void testOneElement() {
         
@@ -257,6 +312,9 @@ public class OnlinegameServiceTest {
         doTest(maxGroupSize, clansArray, expectedGroups);
     }
 
+    /**
+     * Test which empty input data.
+     */
     @Test
     public void testNoClans() {
         
@@ -271,6 +329,30 @@ public class OnlinegameServiceTest {
         doTest(maxGroupSize, clansArray, expectedGroups);
     }
 
+    /**
+     * Test duplicate clans.
+     */
+    @Test
+    public void testDuplicateClandTo2Groups() {
+        
+        int maxGroupSize = 926;
+        
+        int[][] clansArray  = {
+            {194, 44},{177,41},{228,40},{187,10},{187,10}
+        };
+        
+        int[][][] expectedGroups = {
+            {{194, 44},{177,41},{228,40},{187,10}}, 
+            {{187,10}}
+        };
+        
+        doTest(maxGroupSize, clansArray, expectedGroups);
+    }
+    
+    /**
+     * Test what happen if input data is incorrect - size of a clan bigger the
+     * maximum size of a group. Algorithm should avoid infinite loops in that case.
+     */
     @Test
     public void testWrongGroupSize() {
         
@@ -296,7 +378,7 @@ public class OnlinegameServiceTest {
     }
     
     /**
-     * Test of arrangePlayers method, of class OnlinegameService.
+     * Performs many iteration of a test on randomized input data.
      */
     @Test
     public void testRandom() {
@@ -309,15 +391,18 @@ public class OnlinegameServiceTest {
         
     }
 
-    private void makeRandomTest() {
+    /**
+     * Performs single iteration of a test on a randomized input data.
+     */
+    protected void makeRandomTest() {
         
         Random random = new Random();
         
-        int maxPlayersInGroup = 10 + random.nextInt(1, 200);
-        int numberOfClans = random.nextInt(1, 5000);
+        int maxPlayersInGroup = 10 + random.nextInt(1, 1000);
+        int numberOfClans = random.nextInt(1, 20000);
 
         System.out.println(
-                String.format("Test for %d maximum players in group and %d clans.", 
+                String.format("\nTest for %d maximum players in group and %d clans.", 
                         maxPlayersInGroup, 
                         numberOfClans));
         
@@ -335,16 +420,28 @@ public class OnlinegameServiceTest {
         OnlinegameService service;
         List<List<Clan>> result;
         
+        long startTime = System.currentTimeMillis();
         service = new OnlinegameService(OnlineGameAlgorithm.BEST_CLANS_FIRST);
         result = service.organizePlayers(players);
+        long duration = System.currentTimeMillis() - startTime;
+        System.out.println(String.format("Test time using algorithm %s: %d ms",
+                OnlineGameAlgorithm.BEST_CLANS_FIRST.toString(), duration));
         validateResult(result);
         
+        startTime = System.currentTimeMillis();
         service = new OnlinegameService(OnlineGameAlgorithm.FAST_SEARCH_MACTCHING_CLAN);
         result = service.organizePlayers(players);
+        duration = System.currentTimeMillis() - startTime;
+        System.out.println(String.format("Test time using algorithm %s: %d ms",
+                OnlineGameAlgorithm.FAST_SEARCH_MACTCHING_CLAN.toString(), duration));
         validateResult(result);
 
+        startTime = System.currentTimeMillis();
         service = new OnlinegameService(OnlineGameAlgorithm.SELECT_BEST);
         result = service.organizePlayers(players);
+        duration = System.currentTimeMillis() - startTime;
+        System.out.println(String.format("Test time using algorithm %s: %d ms",
+                OnlineGameAlgorithm.SELECT_BEST.toString(), duration));
         validateResult(result);
         
     }

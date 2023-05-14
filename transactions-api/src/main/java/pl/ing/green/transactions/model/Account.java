@@ -1,13 +1,8 @@
 package pl.ing.green.transactions.model;
 
-import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.openapitools.jackson.nullable.JsonNullable;
-import java.time.OffsetDateTime;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -24,9 +19,10 @@ public class Account {
     public final static int ACCOUNT_NUMBER_LENGTH = 26;
 
     public static String randomAccountNumber() {
+        Random random = new Random();
         char[] result = new char[ACCOUNT_NUMBER_LENGTH];
         for (int i = 0; i < ACCOUNT_NUMBER_LENGTH; i++) {
-            int digit = (int) Math.floor(Math.random() * 10);
+            int digit = random.nextInt(0, 10);
             result[i] = (char) (digit + '0');
         }
         return new String(result);
@@ -36,10 +32,10 @@ public class Account {
     private String account;
 
     @JsonProperty("debitCount")
-    private Integer debitCount;
+    private int debitCount;
 
     @JsonProperty("creditCount")
-    private Integer creditCount;
+    private int creditCount;
 
     @JsonProperty("balance")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
@@ -87,7 +83,7 @@ public class Account {
         this.account = account;
     }
 
-    public Account debitCount(Integer debitCount) {
+    public Account debitCount(int debitCount) {
         this.debitCount = debitCount;
         return this;
     }
@@ -98,15 +94,15 @@ public class Account {
      * @return debitCount
      */
     @Schema(name = "debitCount", example = "2", description = "Number of debit transactions", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-    public Integer getDebitCount() {
+    public int getDebitCount() {
         return debitCount;
     }
 
-    public void setDebitCount(Integer debitCount) {
+    public void setDebitCount(int debitCount) {
         this.debitCount = debitCount;
     }
 
-    public Account creditCount(Integer creditCount) {
+    public Account creditCount(int creditCount) {
         this.creditCount = creditCount;
         return this;
     }
@@ -117,11 +113,11 @@ public class Account {
      * @return creditCount
      */
     @Schema(name = "creditCount", example = "2", description = "Number of credit transactions", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-    public Integer getCreditCount() {
+    public int getCreditCount() {
         return creditCount;
     }
 
-    public void setCreditCount(Integer creditCount) {
+    public void setCreditCount(int creditCount) {
         this.creditCount = creditCount;
     }
 

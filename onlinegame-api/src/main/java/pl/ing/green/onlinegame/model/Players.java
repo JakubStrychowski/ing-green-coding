@@ -1,20 +1,14 @@
 package pl.ing.green.onlinegame.model;
 
-import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.ArrayList;
 import java.util.List;
-import pl.ing.green.onlinegame.model.Clan;
-import org.openapitools.jackson.nullable.JsonNullable;
-import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 
-import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
@@ -25,13 +19,13 @@ import jakarta.annotation.Generated;
 public class Players {
 
   @JsonProperty("groupCount")
-  private Integer groupCount;
+  private int groupCount;
 
   @JsonProperty("clans")
   @Valid
   private List<Clan> clans = null;
 
-  public Players groupCount(Integer groupCount) {
+  public Players groupCount(int groupCount) {
     this.groupCount = groupCount;
     return this;
   }
@@ -44,11 +38,11 @@ public class Players {
   */
   @Min(1) @Max(1000) 
   @Schema(name = "groupCount", example = "6", description = "Number of players in single group", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  public Integer getGroupCount() {
+  public int getGroupCount() {
     return groupCount;
   }
 
-  public void setGroupCount(Integer groupCount) {
+  public void setGroupCount(int groupCount) {
     this.groupCount = groupCount;
   }
 

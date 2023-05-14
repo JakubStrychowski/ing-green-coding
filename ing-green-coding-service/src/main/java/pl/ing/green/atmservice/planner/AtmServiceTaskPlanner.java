@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package pl.ing.green.atmservice.planner;
 
 import java.util.ArrayList;
@@ -14,25 +10,43 @@ import pl.ing.green.atmservice.model.ATM;
 import pl.ing.green.atmservice.model.Task;
 
 /**
+ * Makes plan for visiting ATMs in regions.
  *
  * @author Jakub Strychowski
  */
 public class AtmServiceTaskPlanner {
-    
+
     private int numberOfTasks;
+
     private Map<Integer, RegionBuckets> regionsMap;
+
     private ArrayList<Integer> regionsList;
 
-    
+    public AtmServiceTaskPlanner() {
+    }
+
+    /**
+     * Main algorithm which prepares plan. This algorithm has linear complexity
+     * relating to number of tasks. This algorithm uses bucket approach. For
+     * each region this method creates 4 buckets - one for each priority of
+     * visit. Buckets are filled with planned tasks according to input data. One
+     * ATM can appear in few buckets. Next, this algorithm sorts regions and
+     * produces results for each region. Result is filled with ATMs from 4
+     * buckets in order of priorities. If ATM from the region appeared in the
+     * result previously is is omitted (it is added one time).
+     *
+     * @param tasks Preprocessed list of tasks to rearrange.
+     *
+     * @return Sequence of visits of ATMs.
+     */
     public List<ATM> planTasks(List<Task> tasks) {
-        
+
         fillBuckets(tasks);
 
         sortRegions();
-        
+
         return fillResult();
     }
-    
 
     private void fillBuckets(List<Task> tasks) {
         numberOfTasks = 0;
@@ -51,7 +65,7 @@ public class AtmServiceTaskPlanner {
 
     private void sortRegions() {
         regionsList = new ArrayList<>(regionsMap.keySet());
-        regionsList.sort( (r1, r2) -> r1.compareTo(r2));
+        regionsList.sort((r1, r2) -> r1.compareTo(r2));
     }
 
     private List<ATM> fillResult() {
@@ -59,7 +73,7 @@ public class AtmServiceTaskPlanner {
         Set<Integer> visitedAtms = new HashSet<>();
         for (Integer region : regionsList) {
             RegionBuckets buckets = regionsMap.get(region);
-            
+
             visitedAtms.clear();
 
             /* Innym jest sygnał o awarii bankomatu z którym zespół techniczny 
@@ -72,15 +86,15 @@ public class AtmServiceTaskPlanner {
                gdzie trend zużycia stanu gotówki jest wysoki dlatego ta operacja 
                jest wykonywana przed zleceniami standardowymi. */
             addTasksAsATM(result, buckets.priorytyTasks, region, visitedAtms);
-            
+
             /* Jednym z takich zgłoszeń jest sygnał o niskim stanie gotówki bankomatu, 
              który nie był na dzisiaj zaplanowany takie zgłoszenie powinno być 
              zrealizowane zaraz po zakończeniu prac nad zleceniami 
              planowanymi priorytetowymi w danym regionie. */
             addTasksAsATM(result, buckets.lowMoneyTasks, region, visitedAtms);
-            
+
             addTasksAsATM(result, buckets.standardTasks, region, visitedAtms);
-            
+
         }
         return result;
     }
@@ -97,6 +111,4 @@ public class AtmServiceTaskPlanner {
         }
     }
 
-
-    
 }
