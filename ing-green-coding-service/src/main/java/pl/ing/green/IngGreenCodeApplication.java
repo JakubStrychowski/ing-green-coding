@@ -24,10 +24,10 @@ public class IngGreenCodeApplication {
       SpringApplication.run(IngGreenCodeApplication.class, args);
     }
     
-    @GetMapping("/echo")
-    public String hello(@RequestParam(value = "message", defaultValue = "ECHO Echoo echooo echoooo ooo") String message) {
-      return message;
-    }
+//    @GetMapping("/echo")
+//    public String hello(@RequestParam(value = "message", defaultValue = "ECHO Echoo echooo echoooo ooo") String message) {
+//      return message;
+//    }
     
     
 }
