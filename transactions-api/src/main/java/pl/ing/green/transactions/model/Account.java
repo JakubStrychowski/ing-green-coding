@@ -3,12 +3,12 @@ package pl.ing.green.transactions.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.*;
 import jakarta.annotation.Generated;
-import java.math.BigDecimal;
 
 /**
  * Account
@@ -38,8 +38,9 @@ public class Account {
     private int creditCount;
 
     @JsonProperty("balance")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
-    private BigDecimal balance;
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+    @JsonSerialize(using = CustomFloatSerializer.class, as = Float.class)
+    private float balance;
 
     
     public Account() {
@@ -50,17 +51,17 @@ public class Account {
         this.account = accountNumber;
         debitCount = 0;
         creditCount = 0;
-        balance = new BigDecimal(0);
+        balance = 0f;
     }
 
-    public void debit(BigDecimal amount) {
+    public void debit(float amount) {
         debitCount++;
-        balance = balance.subtract(amount).setScale(2);
+        balance -= amount;
     }
 
-    public void credit(BigDecimal amount) {
+    public void credit(float amount) {
         creditCount++;
-        balance = balance.add(amount).setScale(2);
+        balance += amount;
     }
 
     public Account account(String account) {
@@ -121,8 +122,8 @@ public class Account {
         this.creditCount = creditCount;
     }
 
-    public Account balance(BigDecimal balance) {
-        this.balance = balance.setScale(2);
+    public Account balance(float balance) {
+        this.balance = balance;
         return this;
     }
 
@@ -132,12 +133,12 @@ public class Account {
      * @return balance
      */
     @Schema(name = "balance", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-    public BigDecimal getBalance() {
+    public float getBalance() {
         return balance;
     }
 
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance.setScale(2);
+    public void setBalance(float balance) {
+        this.balance = balance;
     }
 
     @Override

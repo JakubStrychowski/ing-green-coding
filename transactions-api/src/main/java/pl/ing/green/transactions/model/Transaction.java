@@ -3,12 +3,12 @@ package pl.ing.green.transactions.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 
 import jakarta.annotation.Generated;
-import java.math.BigDecimal;
 
 /**
  * Transaction
@@ -24,14 +24,15 @@ public class Transaction {
   private String creditAccount;
 
   @JsonProperty("amount")
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
-  private BigDecimal amount;
+  //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+  @JsonSerialize(using = CustomFloatSerializer.class, as = Float.class)
+  private float amount;
 
     public Transaction() {
         
     }
   
-    public Transaction(String debitAccount, String creditAccount, BigDecimal amount) {
+    public Transaction(String debitAccount, String creditAccount, float amount) {
         this.creditAccount = creditAccount;
         this.debitAccount = debitAccount;
         this.amount = amount;
@@ -75,7 +76,7 @@ public class Transaction {
     this.creditAccount = creditAccount;
   }
 
-  public Transaction amount(BigDecimal amount) {
+  public Transaction amount(float amount) {
       this.amount = amount;
       return this;
   }
@@ -86,12 +87,12 @@ public class Transaction {
   */
   
   @Schema(name = "amount", format = "0.00",  requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  public BigDecimal getAmount() {
+  public float getAmount() {
     return amount;
   }
 
-  public void setAmount(BigDecimal amount) {
-    this.amount = amount.setScale(2);
+  public void setAmount(float amount) {
+    this.amount = amount;
   }
 
   @Override
