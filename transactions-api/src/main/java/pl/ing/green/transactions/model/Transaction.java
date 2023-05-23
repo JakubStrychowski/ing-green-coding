@@ -3,6 +3,7 @@ package pl.ing.green.transactions.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -25,6 +26,7 @@ public class Transaction {
 
   @JsonProperty("amount")
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+  @JsonSerialize(using = BigDecimalSerializer.class)
   private BigDecimal amount;
 
     public Transaction() {

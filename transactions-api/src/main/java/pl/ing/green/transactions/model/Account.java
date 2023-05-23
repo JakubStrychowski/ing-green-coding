@@ -1,14 +1,16 @@
 package pl.ing.green.transactions.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.*;
 import jakarta.annotation.Generated;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Account
@@ -39,11 +41,14 @@ public class Account {
 
     @JsonProperty("balance")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+    @JsonSerialize(using = BigDecimalSerializer.class)
     private BigDecimal balance;
 
     
     public Account() {
-        
+        debitCount = 0;
+        creditCount = 0;
+        balance = new BigDecimal(0);
     }
     
     public Account(String accountNumber) {
@@ -55,12 +60,12 @@ public class Account {
 
     public void debit(BigDecimal amount) {
         debitCount++;
-        balance = balance.subtract(amount).setScale(2);
+        balance = balance.subtract(amount).setScale(2, RoundingMode.HALF_UP);
     }
 
     public void credit(BigDecimal amount) {
         creditCount++;
-        balance = balance.add(amount).setScale(2);
+        balance = balance.add(amount).setScale(2, RoundingMode.HALF_UP);
     }
 
     public Account account(String account) {
@@ -122,7 +127,7 @@ public class Account {
     }
 
     public Account balance(BigDecimal balance) {
-        this.balance = balance.setScale(2);
+        this.balance = balance.setScale(2, RoundingMode.HALF_UP);
         return this;
     }
 
@@ -137,7 +142,7 @@ public class Account {
     }
 
     public void setBalance(BigDecimal balance) {
-        this.balance = balance.setScale(2);
+        this.balance = balance.setScale(2, RoundingMode.HALF_UP);
     }
 
     @Override
